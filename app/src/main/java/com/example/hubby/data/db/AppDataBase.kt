@@ -4,13 +4,15 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-
+import androidx.room.TypeConverters
+import com.example.hubby.utils.TypeConverters.TypeConv
 
 
 @Database(
         entities = [Habit::class],
         version = 1
 )
+@TypeConverters(TypeConv::class)
 abstract  class AppDataBase : RoomDatabase() {
 
     abstract fun habitDao(): Dao
@@ -26,7 +28,7 @@ abstract  class AppDataBase : RoomDatabase() {
             synchronized( AppDataBase::class) {
                 INSTANCE = Room.databaseBuilder(context.applicationContext,
                         AppDataBase::class.java,
-                        "habby.db"
+                        "habbits.db"
                 ).build()
             }
 

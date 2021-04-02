@@ -27,6 +27,11 @@ class Fragment_badHabits : Fragment()
     private val mapper: HabitDBMapper = HabitDBMapper()
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
+
     @Override
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,9 +40,8 @@ class Fragment_badHabits : Fragment()
         binding = DataBindingUtil.inflate(inflater , R.layout.fragment_bad_habits , container, false)
         initRecView()
        viewModel.bad_habits?.observe( viewLifecycleOwner, Observer {
-            Log.i("In fragment", it.toString())
             // TODO: should be fixed
-            binding.rvHabits.adapter = RecyclerView_Adapter(mapper.mapToEntityList(viewModel.bad_habits?.value  ?: listOf() ),{habit: Habit ->  itemClicked(habit) })
+            binding.rvHabits.adapter = RecyclerView_Adapter(mapper.mapToEntityList(viewModel.bad_habits?.value  ?: listOf() ),{habit: Habit ->  itemClicked(habit) },{ habit:Habit -> doneListener(habit)  })
         })
         return binding.root
     }
@@ -51,7 +55,7 @@ class Fragment_badHabits : Fragment()
     private  fun initRecView()
     {
         // TODO: dont really like the solution with the nullable list
-        rec_v_adapter = RecyclerView_Adapter(mapper.mapToEntityList(viewModel.bad_habits.value ?: listOf()), {clickedItem: Habit -> itemClicked(clickedItem)})
+        rec_v_adapter = RecyclerView_Adapter(mapper.mapToEntityList(viewModel.bad_habits.value ?: listOf()), {clickedItem: Habit -> itemClicked(clickedItem)},{ habit:Habit -> doneListener(habit)  })
         binding.rvHabits.layoutManager = LinearLayoutManager(context)
         binding.rvHabits.adapter = rec_v_adapter
     }
@@ -63,6 +67,12 @@ class Fragment_badHabits : Fragment()
         viewModel.deleteHabit(habit)
         Toast.makeText(context, " $name was deleted ",Toast.LENGTH_SHORT).show()
         return true
+    }
+
+    fun doneListener( habit: Habit) : Unit{
+        viewModel.updateDone(habit.done_dates, habit.id)
+
+        Toast.makeText(context, " ${habit.id} was uodated  ",Toast.LENGTH_SHORT).show()
     }
 }
 

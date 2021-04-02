@@ -1,10 +1,8 @@
 package com.example.hubby.data.db
 
 import androidx.lifecycle.LiveData
+import androidx.room.*
 import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
 import com.example.core.domain.models.HabitDomainLayer
 import kotlinx.coroutines.flow.Flow
 
@@ -25,4 +23,7 @@ interface Dao {
 
     @Delete
     suspend fun deleteHabit(habit: Habit)
+
+    @Query("UPDATE habits SET done_dates = :done_dates WHERE id = :id")
+    suspend fun updateDoneDates(done_dates:String , id:Int )
 }

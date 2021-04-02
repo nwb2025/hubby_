@@ -5,12 +5,9 @@ import androidx.databinding.Bindable
 import androidx.databinding.Observable
 import androidx.lifecycle.*
 import com.example.core.domain.models.HabitDomainLayer
+import com.example.core.interactors.local_db.*
 
 
-import com.example.core.interactors.local_db.AddHabit
-import com.example.core.interactors.local_db.DeleteHabit
-import com.example.core.interactors.local_db.GetAllHabits
-import com.example.core.interactors.local_db.GetByType
 import com.example.core.interactors.retorfit.PutHabit
 import com.example.hubby.data.api.HabitResponse
 import com.example.hubby.data.db.Habit
@@ -25,6 +22,7 @@ class  HabitViewModel ( private val getHabits:GetAllHabits,
                         private val deleteH: DeleteHabit,
                         private val getHabitsFromServer:GetAllHabits,
                         private val putHabit:PutHabit,
+                        private val updateDoneDates: UpdateDoneDates,
                         private val mapper:HabitDBMapper,
                         private val mapperApi:HabitRetrofitMapper)  : ViewModel() , Observable
 {
@@ -60,22 +58,24 @@ class  HabitViewModel ( private val getHabits:GetAllHabits,
         viewModelScope.launch {
             val des = desc.value.toString() // description
             val n = name.value.toString() // name
-            val date  =  System.currentTimeMillis().toInt() // date
+            val date  =  (System.currentTimeMillis() / 1000).toString()  // date
 
             // TODO: must be fixed !
             val freq = frequency.value?.toInt()
             val count =  count.value?.toInt()
+            val done_dates = ArrayList<String>()
+
 
             if( goodH.value  == true )
             {
-                putHabit(mapperApi.mapFromEntity(HabitResponse(count!!, date, des,freq!!,1,n,0)))
-                addHabit(mapper.mapFromEntity(Habit(0, count!!, date, des, freq!!, 1, n, 0)))
+                //putHabit(mapperApi.mapFromEntity(HabitResponse(count!!, date, des,freq!!,1,n,0, done_dates)))
+                addHabit(mapper.mapFromEntity(Habit(0, count!!, date, des, freq!!, 1, n, 0, done_dates)))
             }
 
             else if ( badH.value == true )
             {
-                putHabit(mapperApi.mapFromEntity(HabitResponse(count!!, date, des,freq!!,1,n,1)))
-                addHabit(mapper.mapFromEntity(Habit(0, count!!, date, des, freq!!, 1, n, 1 )))
+               // putHabit(mapperApi.mapFromEntity(HabitResponse(count!!, date, des,freq!!,1,n,1,done_dates)))
+                addHabit(mapper.mapFromEntity(Habit(0, count!!, date, des, freq!!, 1, n, 1 , done_dates)))
             }
 
             else
@@ -113,6 +113,15 @@ class  HabitViewModel ( private val getHabits:GetAllHabits,
             response.value = resp
         }
     }*/
+
+
+    fun updateDone(done_dates:ArrayList<String>, id:Int){
+        viewModelScope.launch {
+            done_dates.add((System.currentTimeMillis()/1000L).toString())
+            updateDoneDates(done_dates.toString(), id)
+        }
+
+    }
 
 
 

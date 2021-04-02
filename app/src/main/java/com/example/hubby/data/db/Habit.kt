@@ -9,10 +9,11 @@ data class Habit
 (
         @PrimaryKey( autoGenerate = true) val id : Int,
         val count: Int,
-        val date: Int,
+        val date: String,
         val description: String,
         val frequency: Int,
         val priority: Int,
         val name: String,
-        @ColumnInfo(name = "type") val type: Int
+        @ColumnInfo(name = "type") val type: Int,
+        val done_dates : ArrayList<String>
 )

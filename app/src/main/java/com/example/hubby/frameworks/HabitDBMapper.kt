@@ -15,7 +15,8 @@ class HabitDBMapper : EntityMapper <Habit , HabitDomainLayer>
             frequency = entity.frequency,
             priority = entity.priority,
             name = entity.name,
-            type = entity.type
+            type = entity.type,
+            done_dates = entity.done_dates
         )
     }
 
@@ -28,7 +29,8 @@ class HabitDBMapper : EntityMapper <Habit , HabitDomainLayer>
             frequency = domainModel.frequency,
             priority = domainModel.priority,
             name = domainModel.name,
-            type = domainModel.type
+            type = domainModel.type,
+            done_dates = domainModel.done_dates
             )
     }
 

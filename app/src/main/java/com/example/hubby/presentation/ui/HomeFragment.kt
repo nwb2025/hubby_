@@ -14,10 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.example.core.data.HabitDataSource
 import com.example.core.data.HabitRepository
-import com.example.core.interactors.local_db.AddHabit
-import com.example.core.interactors.local_db.DeleteHabit
-import com.example.core.interactors.local_db.GetAllHabits
-import com.example.core.interactors.local_db.GetByType
+import com.example.core.interactors.local_db.*
 import com.example.core.interactors.retorfit.PutHabit
 import com.example.hubby.R
 import com.example.hubby.data.api.RetrofitInstance
@@ -38,8 +35,7 @@ import com.google.android.material.tabs.TabLayout
 
 class HomeFragment : Fragment()
 {
-    private lateinit var binding :FragmenthomeBinding
-    private lateinit var viewPager: ViewPager
+    private lateinit var binding : FragmenthomeBinding
     private var db : AppDataBase? = null
     private var hDao : Dao? = null
     private var dataSource: RoomHabitDataSource? = null
@@ -48,12 +44,18 @@ class HomeFragment : Fragment()
     private var repo: HabitRepository? = null
     private var repoRetrofit : HabitRepository? = null
     private  lateinit var myContext:MainActivity
+    private lateinit var adapter: MyViewPagerAdapter
+
+
+    override fun onActivityCreated(savedInstanceState: Bundle?)
+    {
+
+        super.onActivityCreated(savedInstanceState)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
-
-
         // TODO: this place is dangerous
         // From local DB
         // Todo : should be fixed - we shouldnt use Activity COntext here in DB
@@ -76,25 +78,25 @@ class HomeFragment : Fragment()
             DeleteHabit(repo as HabitRepository),
             GetAllHabits(repoRetrofit as HabitRepository),
             PutHabit(repoRetrofit as HabitRepository),
+            UpdateDoneDates(repo as HabitRepository),
             HabitDBMapper() ,
             HabitRetrofitMapper() )
 
         sharedViewModel = ViewModelProvider(  myContext, factory).get(HabitViewModel::class.java)
 
-        //sharedViewModel?.getAll()
+
 
         sharedViewModel?.habits?.observe( this , Observer {
             Log.i("in Home Fragment ", it.toString())
+
         })
-
-
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View?
+    {
         binding = FragmenthomeBinding.inflate(inflater, container, false)
         initViews()
         return binding.root
@@ -103,20 +105,20 @@ class HomeFragment : Fragment()
     private fun initViews()
     {
         // TODO: should be fixed
-        val adapter = MyViewPagerAdapter(myContext.supportFragmentManager)
+        adapter = MyViewPagerAdapter(childFragmentManager)
 
         adapter.addFragment(Fragment_GoodHabits(),"Хорошие")
 
         adapter.addFragment(Fragment_badHabits(),"Плохие")
 
-        viewPager = binding.viewPager
-        binding.viewPager.adapter = adapter
 
-        binding.tabL.setupWithViewPager(viewPager)
+        binding.viewPager.adapter = adapter
+       // binding.viewPager.offscreenPageLimit = 2
+
+        binding.tabL.setupWithViewPager(binding.viewPager)
 
 
         binding.btnAdd.setOnClickListener() {
-            Log.i("Clicked", "discovered click ")
             val intent = Intent(context, Activity_AddHabit::class.java)
             startActivity(intent)
             // Trans Animation
@@ -125,7 +127,10 @@ class HomeFragment : Fragment()
     }
 
     override fun onAttach(activity: Activity) {
+        Log.i("On attach home","on attach")
         myContext = activity as MainActivity
         super.onAttach(activity)
     }
+
+
 }

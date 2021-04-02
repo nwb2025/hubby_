@@ -14,7 +14,8 @@ class HabitRetrofitMapper : EntityMapper<HabitResponse, HabitDomainLayer> {
             frequency = entity.frequency,
             priority = entity.priority,
             name = entity.title,
-            type = entity.type
+            type = entity.type,
+            done_dates = entity.done_dates
         )
     }
 
@@ -27,7 +28,8 @@ class HabitRetrofitMapper : EntityMapper<HabitResponse, HabitDomainLayer> {
             frequency = domainModel.frequency,
             priority = domainModel.priority,
             title = domainModel.name,
-            type = domainModel.type
+            type = domainModel.type,
+            done_dates =  domainModel.done_dates
         )
     }
 

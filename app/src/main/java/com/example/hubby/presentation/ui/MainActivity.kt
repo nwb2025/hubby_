@@ -13,18 +13,18 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity()
 {
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val bottomNavView = findViewById<BottomNavigationView>(R.id.bottom_nav_v)
         val navController = findNavController(R.id.fragment4)
 
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.homeFragment, R.id.settingsFragment, R.id.infoFragment))
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.homeFragment, R.id.settingsFragment))
 
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        bottomNavView.setupWithNavController(navController)
-
+        setupActionBarWithNavController(navController, appBarConfiguration )
+        bottomNavView.setupWithNavController( navController )
 
     }
 }

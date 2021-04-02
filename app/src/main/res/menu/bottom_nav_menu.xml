@@ -8,7 +8,4 @@
         android:title="@string/settings"
         android:icon="@drawable/ic_settings"
         />
-    <item android:id="@+id/infoFragment"
-        android:title="@string/about"
-        android:icon="@drawable/ic_about"/>
 </menu>

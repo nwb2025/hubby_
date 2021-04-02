@@ -1,5 +1,6 @@
 package com.example.hubby.presentation.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -26,21 +27,26 @@ class Fragment_GoodHabits : Fragment()
     private val viewModel by activityViewModels <HabitViewModel>()
     private val mapper:HabitDBMapper = HabitDBMapper()
 
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View?
     {
-        viewModel.bad_habits?.value
-
         binding = DataBindingUtil.inflate(inflater , R.layout.fragment__good_habits, container, false)
 
         initRecView()
 
         viewModel.good_habits?.observe( viewLifecycleOwner, Observer {
-           Log.i("In fragment", it.toString())
            // TODO:  should be fixed ! it's much better to use mapper in one  place
                // TODO  : and nullable - we shouldn call it like that !!!
-          binding.rvHabits.adapter = RecyclerView_Adapter(mapper.mapToEntityList(viewModel.good_habits?.value ?: listOf()) ,{habit: Habit ->  itemClicked(habit) } )
+          binding.rvHabits.adapter = RecyclerView_Adapter(mapper.mapToEntityList(viewModel.good_habits?.value ?: listOf()) ,{habit: Habit ->  itemClicked(habit) },{ habit:Habit -> doneListener(habit)  } )
        })
 
 
@@ -48,15 +54,14 @@ class Fragment_GoodHabits : Fragment()
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?)
-    {
-        // TODO here should be some logic when we swipe in our viewpager
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
     }
 
 
    private  fun initRecView()
     {
-        rec_v_adapter = RecyclerView_Adapter(mapper.mapToEntityList(viewModel.good_habits?.value ?: listOf() ), {habit: Habit ->  itemClicked(habit) })
+        rec_v_adapter = RecyclerView_Adapter(mapper.mapToEntityList(viewModel.good_habits?.value ?: listOf() ), {habit: Habit ->  itemClicked(habit) }, { habit:Habit -> doneListener(habit) })
         binding.rvHabits.layoutManager = LinearLayoutManager(context)
         binding.rvHabits.adapter = rec_v_adapter
     }
@@ -68,5 +73,11 @@ class Fragment_GoodHabits : Fragment()
         // TODO : a dialog should appear here
         Toast.makeText(context, " $name was deleted ",Toast.LENGTH_SHORT).show()
         return true
+    }
+
+    fun doneListener( habit: Habit) : Unit{
+        viewModel.updateDone(habit.done_dates, habit.id)
+
+        Toast.makeText(context, " ${habit.id} was uodated  ",Toast.LENGTH_SHORT).show()
     }
 }

@@ -19,4 +19,6 @@ class HabitRepository ( private val dataSource :  HabitDataSource )
     fun getByType(type:String) : Flow<List<HabitDomainLayer>> = dataSource.getByType(type)
 
     suspend fun deleteHabit(habit: HabitDomainLayer) = dataSource.remove(habit)
+
+    suspend fun updateDoneDates(doneDates:String, id:Int) = dataSource.updateDoneDates(doneDates, id)
 }

@@ -24,4 +24,10 @@ class RoomHabitDataSource ( private val dao: Dao?) : HabitDataSource
     {
         dao?.deleteHabit(mapper.mapToEntity(habit))
     }
+
+    override suspend fun updateDoneDates(doneDates: String, id: Int) {
+        dao?.updateDoneDates ( doneDates, id)
+    }
+
+
 }

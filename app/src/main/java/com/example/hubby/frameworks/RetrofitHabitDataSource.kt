@@ -25,4 +25,8 @@ class RetrofitHabitDataSource (private val retroApi: RetrofitInstance)  : HabitD
         TODO("Not yet implemented")
     }
 
+    override suspend fun updateDoneDates(doneDates:String, id: Int) {
+        TODO("Not yet implemented")
+    }
+
 }

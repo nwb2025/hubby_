@@ -11,6 +11,7 @@ interface HabitDataSource
     fun getAll() : Flow<List<HabitDomainLayer>>
     fun getByType(type:String) : Flow<List<HabitDomainLayer>>
     suspend fun remove(habit: HabitDomainLayer)
+    suspend fun updateDoneDates(doneDates:String, id:Int)
 
 }
 

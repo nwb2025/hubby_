@@ -10,10 +10,7 @@ import com.example.hubby.databinding.ActivityAddHabitBinding
 import com.example.hubby.data.db.AppDataBase
 import com.example.core.data.HabitDataSource
 import com.example.core.data.HabitRepository
-import com.example.core.interactors.local_db.AddHabit
-import com.example.core.interactors.local_db.DeleteHabit
-import com.example.core.interactors.local_db.GetAllHabits
-import com.example.core.interactors.local_db.GetByType
+import com.example.core.interactors.local_db.*
 import com.example.core.interactors.retorfit.PutHabit
 import com.example.hubby.presentation.viewmodels.HabitViewModel
 import com.example.hubby.R
@@ -61,6 +58,7 @@ class Activity_AddHabit : AppCompatActivity()
             DeleteHabit(repo as HabitRepository),
             GetAllHabits(repoRetrofit as HabitRepository),
             PutHabit(repoRetrofit as HabitRepository),
+            UpdateDoneDates(repo as HabitRepository),
             HabitDBMapper() ,
             HabitRetrofitMapper() )
 
